@@ -244,6 +244,7 @@ char* handleRequest(Request r)
 			}
 		}
 	}
+	printf("This part might messup.\n");
 	char *response = (char*)malloc(sizeof(body) * 2);
 	sprintf(response, "HTTP/1.0 200 OK\nContent=Type: text/html\nContent-Length: %lu\n\n%s", bodyLength, body);
 	return response;
