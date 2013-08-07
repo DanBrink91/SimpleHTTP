@@ -211,7 +211,7 @@ char* handleRequest(Request r)
 {
 	char* header = 0;
 	char* body = 0;
-	long bodyLength;
+	unsigned long bodyLength;
 	//  Send headers
 
 	//  Send body
@@ -226,15 +226,14 @@ char* handleRequest(Request r)
 		//  Grab what they ask for
 		else
 		{
-			FILE* file = fopen(r.parameter, "r");
+			FILE* file = fopen(r.parameter+1, "r");
 			if(file)
 			{
 				
-				long length;
 				fseek(file, 0, SEEK_END);
 				bodyLength = ftell(file);
 				fseek(file, 0, SEEK_SET);
-				body = malloc(bodyLength);
+				body = (char*)malloc(bodyLength);
 				fread(body, 1 , bodyLength, file);
 				fclose(file);
 			}
@@ -245,10 +244,7 @@ char* handleRequest(Request r)
 			}
 		}
 	}
-	return body;
-}
-
-char* get_file_contents(FILE* file)
-{
-
+	char *response = (char*)malloc(sizeof(body) * 2);
+	sprintf(response, "HTTP/1.0 200 OK\nContent=Type: text/html\nContent-Length: %lu\n\n%s", bodyLength, body);
+	return response;
 }
